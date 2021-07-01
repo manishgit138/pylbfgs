@@ -132,7 +132,7 @@ jobs:
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             find . -name "*linux_aarch64.whl" && \
-            ls -l wheelhouse/
+            ls -l dist/* && \
             pip install twine && \
             twine upload dist/* && \
             deactivate'
