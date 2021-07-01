@@ -120,6 +120,7 @@ jobs:
             source .env/bin/activate && \
             pip install cython numpy && \
             pip wheel -w dist --no-deps . && \
+            find . -name "*linux_aarch64.whl" && \
             deactivate'
     - name: Publish wheels to PyPI
       env:
@@ -130,6 +131,7 @@ jobs:
             ${{ env.img }} \
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
+            find . -name "*linux_aarch64.whl" && \
             ls -l wheelhouse/
             pip install twine && \
             twine upload --skip-existing wheelhouse/ && \
