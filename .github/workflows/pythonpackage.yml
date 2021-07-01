@@ -134,5 +134,5 @@ jobs:
             find . -name "*linux_aarch64.whl" && \
             ls -l wheelhouse/
             pip install twine && \
-            twine upload --skip-existing wheelhouse/ && \
+            twine upload dist/* && \
             deactivate'
