@@ -79,16 +79,16 @@ jobs:
         twine upload dist/*
       continue-on-error: true
   build_aarch64_wheel:
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     name: "Test ${{ matrix.pyver }} aarch64"
     strategy:
       matrix:
         pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
-        arch: [aarch64]
       fail-fast: false
     runs-on: ubuntu-latest
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
-      img: quay.io/pypa/manylinux2014_${{ matrix.arch }}
+      img: quay.io/pypa/manylinux2014_aarch64
     steps:
     - uses: actions/checkout@v1
     - name: Set up QEMU
@@ -120,7 +120,6 @@ jobs:
             source .env/bin/activate && \
             pip install cython numpy && \
             pip wheel -w dist --no-deps . && \
-            find . -name "*linux_aarch64.whl" && \
             deactivate'
     - name: Publish wheels to PyPI
       env:
