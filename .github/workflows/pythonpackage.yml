@@ -79,8 +79,8 @@ jobs:
         twine upload dist/*
       continue-on-error: true
   build_aarch64_wheel:
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    name: "Test ${{ matrix.pyver }} aarch64"
+    #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    name: "test (aarch64, ${{ matrix.pyver }})"
     strategy:
       matrix:
         pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
@@ -107,16 +107,28 @@ jobs:
       run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
-            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
+            bash -exc '\
             source .env/bin/activate && \
             pip install -r requirements.txt && \
             pytest tests && \
+            deactivate'
+    - name: Coveralls
+      env:
+        COVERALLS_PARALLEL: true
+        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} \
+            bash -exc '\
+            source .env/bin/activate && \
+            pip install https://github.com/bboe/coveralls-python/archive/github_actions.zip && \
+            coveralls && \
             deactivate'
     - name: Build aarch64 wheels
       run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
-            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
+            bash -exc '\
             source .env/bin/activate && \
             pip install cython numpy && \
             pip wheel -w dist --no-deps . && \
