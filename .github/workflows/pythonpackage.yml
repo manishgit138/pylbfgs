@@ -28,7 +28,7 @@ jobs:
     - name: Coveralls
       env:
         COVERALLS_PARALLEL: true
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALL }}
       run: |
         pip install https://github.com/bboe/coveralls-python/archive/github_actions.zip
         coveralls
@@ -83,7 +83,7 @@ jobs:
     name: "test (aarch64, ${{ matrix.pyver }})"
     strategy:
       matrix:
-        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38, cp39-cp39]
+        pyver: [cp36-cp36m, cp37-cp37m, cp38-cp38]
       fail-fast: false
     runs-on: ubuntu-latest
     env:
@@ -115,7 +115,7 @@ jobs:
     - name: Coveralls
       env:
         COVERALLS_PARALLEL: true
-        COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALL }}
       run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
