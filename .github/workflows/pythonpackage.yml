@@ -124,6 +124,13 @@ jobs:
             source .env/bin/activate && \
             pip install twine && \
             pip wheel -w dist --no-deps . && \
-            ls -l dist/* && \
-            #twine upload dist/* && \
+            auditwheel repair dist/*.whl --wheel-dir wheelhouse/ && \
             deactivate'
+    - name: Publish wheels to PyPI
+      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        pip install twine
+        twine upload wheelhouse/*manylinux2014_aarch64.whl
