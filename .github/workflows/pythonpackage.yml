@@ -127,7 +127,7 @@ jobs:
             auditwheel repair dist/*.whl --wheel-dir wheelhouse/ && \
             deactivate'
     - name: Publish wheels to PyPI
-      if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+      #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
