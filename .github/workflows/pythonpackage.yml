@@ -79,7 +79,7 @@ jobs:
         twine upload dist/*
       continue-on-error: true
   build_aarch64_wheel:
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    #if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     name: "test (aarch64, ${{ matrix.pyver }})"
     strategy:
       matrix:
@@ -118,8 +118,9 @@ jobs:
             ${{ env.img }} \
             bash -exc '\
             source .env/bin/activate && \
-            pip install cython numpy && \
+            pip install twine && \
             pip wheel -w dist --no-deps . && \
+            #twine upload dist/* && \
             deactivate'
     - name: Publish wheels to PyPI
       env:
